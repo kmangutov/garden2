@@ -9,7 +9,7 @@ module.exports = {
 
   attributes: {
 	slot: 'string',
-	hoursneeded: 'integer',
+	volunteersNeeded: 'integer',
 	volunteers: {
 		collection: 'volunteer',
 		via: 'workunits',
