@@ -8,7 +8,7 @@
 module.exports = {
 
   attributes: {
-	slot: 'string',
+	slot: 'datetime',
 	volunteersNeeded: 'integer',
 	volunteers: {
 		collection: 'volunteer',

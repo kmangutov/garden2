@@ -10,7 +10,7 @@ module.exports = {
   attributes: {
   	email: 'string',
   	password: 'string',
-  	freetimes: 'json',
+  	freetimes: 'array',	//array of datetime
   	workunits: {
   		collection: 'workunit',
   		via: 'volunteers'

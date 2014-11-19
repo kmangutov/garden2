@@ -44,26 +44,6 @@ module.exports.routes = {
   'post /api/login': {
     controller: 'Main',
     action: 'login'
-  },
-
-  'post /api/station/create': {
-    controller: 'Station',
-    action: 'create'
-  },
-
-  'get /api/station':{
-    controller: 'Station',
-    action: 'index'
-  },
-
-  'post /api/workunit/add': {
-    controller: 'WorkUnit',
-    action: 'add'
-  },
-
-  'get /api/workunit': {
-    controller: 'WorkUnit',
-    action: 'index'
   }
 
   /***************************************************************************
