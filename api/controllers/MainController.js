@@ -12,14 +12,19 @@ module.exports = {
 
 
 		Volunteer.findByEmail(email).exec(function(err, usr){
-			sails.log(usr);
+			sails.log(usr[0]);
 			if(err)
 				return res.send(500, {error: "DB Error"});
-			if(usr.length > 0)
-				return res.send(400, usr);
-			else
+			if(usr.length > 0) {
+				req.session.user = usr[0].id;
+
+				return res.send(400, {user:usr, msg:"succeed"});
+			}
+			else{
+				req.session.user = null;
 				return res.send(404, {error: "User not found"});
+			}
 		});
-	}	
+	}
 };
 
