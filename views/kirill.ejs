@@ -99,7 +99,12 @@
             render: function(id) {
                 var that = this;
                 var stationObject = stations.get(id);
-                $(this.el).html("<h1>id: " + id + "</h1>");
+
+                var template = _.template($("#station-detail-template").html());
+                var vars = {station: stationObject};
+                var html = template(vars);
+
+                $(this.el).html(html);
             }
         });
 
