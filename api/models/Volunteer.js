@@ -21,16 +21,17 @@ module.exports = {
   	     },
 
         findIndexOf:function(time) {
-            if(typeof this.freetimes === "undefined")
-                return false;
+            sails.log("array length :" + this.freetimes.length);
+            var moment = require('moment');
             for (var i = 0; i < this.freetimes.length; i++){
-                sails.log(time + this.freetimes[i]);
-
-                //TODO: object in freetimes is no longer moment object..
-                if(time.diff(this.freetimes[i]) == 0)
-                    return true;
+                //temporary fix
+                var obj = moment(this.freetimes[i]._i);
+                if(obj.diff(time)){
+                    sails.log("find duplicate");
+                    return i;
+                }
             }
-            return false;
+            return -1;
         }
     }
 };

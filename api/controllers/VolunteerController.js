@@ -40,8 +40,7 @@ module.exports = {
 			return res.send(500, {error:"Datetime format is not correct"});
 
 		var time = moment(timeStr);
-		sails.log("time add: " + timeStr + " to id" + req.session.user);
-
+		
 		if (req.session.user == null) {
 			return res.send(500, {error:"You need to log in first"});
 		} else {
@@ -52,7 +51,7 @@ module.exports = {
 				else {
 					if(typeof usr.freetimes === "undefined")
 						usr.freetimes = [];
-					if(usr.findIndexOf(time) == -1)
+					if(usr.findIndexOf(time) != -1)
 						return res.send(400, {error:"Cannot add same time slot"});
 
 					usr.freetimes.push(time);
