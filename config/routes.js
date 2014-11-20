@@ -36,6 +36,10 @@ module.exports.routes = {
     view: 'index'
   },
 
+  '/kirill': {
+    view: 'kirill'
+  },
+
   'post /api/signup': {
     controller: 'Volunteer',
     action: 'signup'

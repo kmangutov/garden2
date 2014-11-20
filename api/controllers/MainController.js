@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var jwt = require('jsonwebtoken');
+
 module.exports = {
 	'login': function(req, res) {
 		var email = req.param("email");
@@ -16,9 +18,10 @@ module.exports = {
 			if(err)
 				return res.send(500, {error: "DB Error"});
 			if(usr.length > 0) {
-				req.session.user = usr[0].id;
-
-				return res.send(400, {user:usr, msg:"succeed"});
+				var jwtSecret = "secretl0l";
+				var token = jwt.sign(usr, jwtSecret, {expiresInMinutes: 60*5});
+				sails.log("login success token:" + token);
+				return res.send(200, {user:usr, msg:"succeed", token: token});
 			}
 			else{
 				req.session.user = null;

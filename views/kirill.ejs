@@ -1,0 +1,194 @@
+
+<script type="text/template" id="station-detail-template">
+    <h2>Station {{= station.get('name') }}</h2>
+</script>
+
+<script type="text/template" id="station-list-template">
+    <table class = "table striped">
+        <thead>
+            <tr><th>Station</th></tr>
+        </thead>
+
+        <tbody>
+            {{ _.each(stations, function(station){ }}
+                <tr>
+                    <td>
+                        <a href="#/station/{{= station.get('id') }}">
+                            {{= station.get('name') }}
+                        </a>
+                    </td>
+                </tr>
+            {{ }); }}
+        </tbody>
+    </table>
+</script>
+
+
+<script type="text/template" id="login-template">
+    <h1>Login</h1>
+
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="inputEmail">Email</label>
+        <div class="controls">
+          <input type="text" id="inputEmail" placeholder="Email">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputPassword">Password</label>
+        <div class="controls">
+          <input type="password" id="inputPassword" placeholder="Password">
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" class="btn" id="loginButton">Sign in</button>
+        </div>
+      </div>
+    </form>
+</script>
+
+
+<script>
+    window.onload = function() {
+
+        _.templateSettings = {
+            interpolate: /\{\{=(.+?)\}\}/g,
+            evaluate: /\{\{(.+?)\}\}/g,
+        };
+
+        window.App = {
+            Views: {},
+            Models: {},
+            Collections: {}
+        }
+
+        App.Models.Station = Backbone.Model.extend({
+            defaults: {
+                name: ''
+            },
+            //urlRoot: '/api/station/'
+        });
+
+        App.Collections.Stations = Backbone.Collection.extend({
+            model: App.Models.Station,
+            url: '/api/station/'
+        });
+
+        var stations = new App.Collections.Stations();
+
+        App.Views.StationList = Backbone.View.extend({
+            el: '.sidebar',
+            render: function() {
+                var that = this;
+                stations.fetch({
+                    success: function() {
+
+                        var template = _.template($("#station-list-template").html());
+                        var vars = {stations: stations.models};
+                        var html = template(vars);
+                        that.$el.html(html);
+                    }
+                });
+
+            }
+        });
+
+        App.Views.StationDetail = Backbone.View.extend({
+            el: '.content',
+            render: function(id) {
+                var that = this;
+                var stationObject = stations.get(id);
+                $(this.el).html("<h1>id: " + id + "</h1>");
+            }
+        });
+
+        App.Views.LoginView = Backbone.View.extend({
+            el: '.content',
+
+            events: {
+                "click #loginButton": "login"
+            },
+
+            login: function() {
+                event.preventDefault();
+                $('.alert-error').hide();
+                var url = "/api/login";
+                console.log("Logging in");
+
+                var values = {
+                    email: $('#inputEmail').val(),
+                    password: $('#inputPassword').val()
+                };
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: values,
+                    success: function(data) {
+                        console.log("Success");
+
+                        if(data.error) {
+                            $('.alert-error').text(data.error.text).show();
+                        } else {
+                            window.location.replace('#/station');
+                        }
+                    },
+                    error: function(data) {
+                        $('.alert-error').text("Invalid Login").show();
+                    }
+                });
+            },
+
+            render: function() {
+                var template = _.template($("#login-template").html());
+                $(this.el).html(template);
+            }
+        });
+
+
+        var stationList = new App.Views.StationList();
+        var loginView = new App.Views.LoginView();
+
+        var Router = Backbone.Router.extend({
+            routes: {
+                '': 'login',
+                'station': 'station',
+                'station/:station_id': 'stationDetail'
+            },
+
+            initialize: function() {
+                loginView.render();
+            },
+
+            station: function() {
+                stationList.render();
+            },
+
+            login: function() {
+                loginView.render();
+            },
+
+            stationDetail: function(station_id) {
+                var stationDetail = new App.Views.StationDetail();
+                stationDetail.render(station_id);
+            }
+        });
+
+        var router = new Router();
+        Backbone.history.start();
+    };
+
+</script>
+
+<div class="container">
+
+    <div class="alert alert-error" style="display:none;"></div>
+    <h1>Hello</h1>
+
+    <div style="width: 100%;">
+        <div class="sidebar" style="width: 200px; float: left;"></div>
+        <div class="content" style="margin-left: 202px;"></div>
+    </div>
+</div>
