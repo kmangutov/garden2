@@ -44,6 +44,21 @@ module.exports.routes = {
   'post /api/login': {
     controller: 'Main',
     action: 'login'
+  },
+
+  'post /api/addtime': {
+    controller: 'Volunteer',
+    action: 'addFreeTime'
+  },
+  
+  'post /api/removetime': {
+    controller: 'Volunteer',
+    action: 'removeFreeTime'
+  },
+
+  'post /api/removeall': {
+    controller: 'Volunteer',
+    action: 'removeAll'
   }
 
   /***************************************************************************

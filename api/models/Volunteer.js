@@ -7,14 +7,31 @@
 
 module.exports = {
 
-  attributes: {
-  	email: 'string',
-  	password: 'string',
-  	freetimes: 'array',	//array of datetime
-  	workunits: {
-  		collection: 'workunit',
-  		via: 'volunteers'
-  	}
-  }
+    attributes: {
+        email: 'string',
+  	    password: 'string',
+  	    freetimes: { 
+            type:'array',
+            array: true
+        },	//array of datetime
+  	 
+        workunits: {
+  		    collection: 'workunit',
+  		    via: 'volunteers'
+  	     },
+
+        findIndexOf:function(time) {
+            if(typeof this.freetimes === "undefined")
+                return false;
+            for (var i = 0; i < this.freetimes.length; i++){
+                sails.log(time + this.freetimes[i]);
+
+                //TODO: object in freetimes is no longer moment object..
+                if(time.diff(this.freetimes[i]) == 0)
+                    return true;
+            }
+            return false;
+        }
+    }
 };
 
