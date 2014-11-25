@@ -63,6 +63,11 @@ module.exports.routes = {
   'post /api/removeall': {
     controller: 'Volunteer',
     action: 'removeAll'
+  },
+
+  'get /api/station/matchall': {
+    controller: 'MainController',
+    action: 'matchall'
   }
 
   /***************************************************************************

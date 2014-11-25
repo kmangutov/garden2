@@ -20,6 +20,7 @@ module.exports = {
 			if(usr.length > 0) {
 				var jwtSecret = "secretl0l";
 				var token = jwt.sign(usr, jwtSecret, {expiresInMinutes: 60*5});
+				req.session.user = usr[0].id;
 				sails.log("login success token:" + token);
 				return res.send(200, {user:usr, msg:"succeed", token: token});
 			}
@@ -33,36 +34,23 @@ module.exports = {
 	matchall: function(req, res) {
 		Station.find().exec(function(err, stations) {
 			//for every station 
+			if(err) 
+				return res.send(500, {error:"DB error"});
+		
 			stations.forEach(function(station) {
-				//for every workunits in the station
-				station.populate('workunits').exec(function(err, workunit){
-					//for all volunteer
-					Volunteer.find().exec(function(err, volunteers) {
-						volunteers.forEach(function(volunteer) {
-							//compare datetime workunit vs volunteer
-							//if anything match, make association between workunit and volunteer
-							//no association with workunit yet
-							if (typeof volunteer.workunits == 'undefined')
-							{
-
-							} else if (volunteer.workunits.length < 10) {
-
-							} else {
-								//max reach, pass 
-							}
-
-						});
-					});
-				});
+				station.matchWorkUnits();
 			});
+
+			return res.send(200, {result:stations});
 		});
 
 	},
 
 	matchWithId: function(req, res) {
 		var sid = req.param("stationid");
-		Station.find({id:sid}).exec(function(err, station){
 
+		Station.find().where({id:sid}).exec(function(err, station){
+			station.matchWorkUnits();
 		});
 	}
 };

@@ -26,13 +26,20 @@ module.exports = {
             for (var i = 0; i < this.freetimes.length; i++){
                 //temporary fix
                 var obj = moment(this.freetimes[i]._i);
-                if(obj.diff(time)){
+                sails.log("time: " + obj);
+                sails.log("in time: " + time);
+                if(obj.toString() == time.toString()){
                     sails.log("find duplicate");
                     return i;
-                }
+                } 
             }
             return -1;
         }
+    },
+
+    beforeCreate:function(values, cb){
+        volunteer.freetimes = [];
+        cb();
     }
 };
 
