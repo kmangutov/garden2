@@ -31,13 +31,13 @@ module.exports = {
 	},
 
 	matchall: function(req, res) {
-		Station.findAll().exec(function(err, stations) {
+		Station.find().exec(function(err, stations) {
 			//for every station 
 			stations.forEach(function(station) {
 				//for every workunits in the station
-				station.populateAll().exec(function(err, workunit){
+				station.populate('workunits').exec(function(err, workunit){
 					//for all volunteer
-					Volunteer.findAll().exec(function(err, volunteers) {
+					Volunteer.find().exec(function(err, volunteers) {
 						volunteers.forEach(function(volunteer) {
 							//compare datetime workunit vs volunteer
 							//if anything match, make association between workunit and volunteer
@@ -61,9 +61,9 @@ module.exports = {
 
 	matchWithId: function(req, res) {
 		var sid = req.param("stationid");
-		Station.find({id:sid}).exec(function(err, station)){
+		Station.find({id:sid}).exec(function(err, station){
 
-		}
+		});
 	}
 };
 
