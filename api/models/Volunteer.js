@@ -33,6 +33,10 @@ module.exports = {
             }
             return -1;
         }
+    },
+
+    beforeCreate:function(volunteer, next){
+        volunteer.freetimes = [];
     }
 };
 
