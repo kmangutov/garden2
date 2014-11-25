@@ -32,15 +32,10 @@ module.exports = {
 
 	'addFreeTime': function(req, res) {
 		sails.log("add free time");
-		//assume format is YYYY-MM-DD HH
+		//assume format is "2014-11-17T08:00:00.010Z"
 		var timeStr = req.param('time');
-		var moment = require('moment');
+		var time = new Date(timeStr);
 
-		if(!moment(timeStr).isValid())
-			return res.send(500, {error:"Datetime format is not correct"});
-
-		var time = moment(timeStr);
-		
 		if (req.session.user == null) {
 			return res.send(500, {error:"You need to log in first"});
 		} else {
@@ -49,8 +44,8 @@ module.exports = {
 				if(err)
 					return res.send(500, {error:"DB Error"});
 				else {
-					if(typeof usr.freetimes === "undefined")
-						usr.freetimes = [];
+					//if(typeof usr.freetimes === "undefined")
+					//	usr.freetimes = [];
 					if(usr.findIndexOf(time) != -1)
 						return res.send(400, {error:"Cannot add same time slot"});
 
@@ -67,12 +62,8 @@ module.exports = {
 
 	'removeFreeTime': function(req, res) {
 		var timeStr = req.param('time');
-		var moment = require('moment');
-
-		if(!moment(timeStr).isValid())
-			return res.send(500, {error:"Datetime format is not correct"});
-
-		var time = moment(timeStr);
+		var time = new Date(timeStr);
+		//need to validate input
 
 		if (req.session.user == null) {
 			return res.send(500, {error:"You need to log in first"});

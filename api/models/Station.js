@@ -26,7 +26,7 @@ module.exports = {
                     Volunteer.find().exec(function(err, volunteers) {
                         volunteers.forEach(function(volunteer) {            
                             if (volunteer.workunits.length < 10 && 
-                                volunteer.freetimes.length > 0 && 1) {
+                                volunteer.freetimes.length > 0 ) {
                                 for (var t in volunteer.freetimes) {
                                     // compare freetimes vs workunit
                                     // and make association if match 
