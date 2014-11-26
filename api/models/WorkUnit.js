@@ -11,9 +11,15 @@ module.exports = {
 
   attributes: {
     
-    slot: 'datetime',
+    slot: {
+      type: 'datetime',
+      required: true
+    },
 
-    volunteersNeeded: 'integer',
+    volunteersNeeded: {
+      type: 'integer',
+      required: true
+    },
 
     volunteers: {
       collection: 'volunteer',

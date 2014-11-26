@@ -59,7 +59,7 @@ module.exports = {
   },
 
   beforeCreate: function(values, next) {
-    volunteer.freetimes = [];
+    values.freetimes = [];
     bcrypt.genSalt(10, function(err, salt) {
       if(err) return next(err);
 

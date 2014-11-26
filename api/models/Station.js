@@ -21,56 +21,72 @@ module.exports = {
             via: 'station'
         },
 
-        matchWorkUnits:function(workunits){
-            sails.log("in matchworkunit");
+        matchWorkUnits: function(workunits){
+            sails.log("in matchworkunit: " + JSON.stringify(workunits));
             //not sure this is most efficient way to populate workunits
             //because I can't test unless station has association with some workunits
             //and see if it has id or object in it
             //but for now this works 
-            for (var w in workunits) {
+
+            //for (var w in workunits) {
+            workunits.forEach(function(w){
+
+                sails.log("w: " + JSON.stringify(w));
                 //for all volunteer
                 Volunteer.find().exec(function(err, volunteers) {
-                    for (var volunteer in volunteers) {  
+                    //for (var volunteer in volunteers) {  
+                    volunteers.forEach(function(volunteer) {
+
+                        sails.log("\n\n\tWorkUnit: " + JSON.stringify(w) + "\n\tVolunteer:" + JSON.stringify(volunteer));
+
                         if (volunteer.workunits.length < 10 || volunteer.freetimes.length > 0) {
-                            for (var t in volunteer.freetimes) {
+                            volunteer.freetimes.forEach(function(t) {
                                 // compare freetimes vs workunit
                                 // and make association if match 
-                                if (w.slot.toISOString() == t.toISOString()) {
-                                    volunteer.workunits.add(w.id);
-                                    w.volunteers.add(volunteer.id);
 
-                                    //decrement need counter
-                                    w.volunteersNeeded--;
-                                }
+                                sails.log("\t\tVolunteer FreeTime:" + JSON.stringify(t));
 
-                                //break inner loop if need count is 0
-                                if (w.volunteersNeeded == 0 || volunteer.freetimes.length < 10)
-                                    break;
 
-                            }
+                                var numVolunteers = 0;
+                                if(w.volunteers)
+                                  numVolunteers = w.volunteers.length;
+
+                                if (w.slot == t && w.volunteersNeeded - numVolunteers > 0) {
+                                    
+                                    sails.log("Matched and saved volunteer.id:" + volunteer.id);
+                                    //w.volunteers.add(volunteer.id);
+                                    
+                                    var newVolunteers = w.volunteers;
+                                    newVolunteers.push(volunteer.id);
+
+                                    sails.log("current volunteers: " + JSON.stringify(w.volunteers));
+                                    w.volunteers.push(volunteer.id);
+                                    sails.log("new volutneers: " + JSON.stringify(w.volunteers));   
+
+                                    WorkUnit.update({id: w.id}, {volunteers: newVolunteers}).exec(function(err, updated) {
+
+                                    });
+                                    w.save(function (err) {
+                                        if(err) {
+                                            sails.log("fuck: " + err);
+                                            
+                                        }
+                                    });
+                                }   
+                            });
                             
                         } 
 
-                        //workunit is fulled, proceed next workunit
-                        if(w.volunteersNeeded == 0)
-                            break;
 
-                        volunteer.save(function (err){
-
-                        });
-
-                    } //end for
+                    }); //end for
                 }); //end exec
             
-                //saved all changes
-                w.save(function (err) {
 
-                });
-            }
+            });
         },
 
         //remove all association with workunits / volunteers
-        reset:function() {
+        reset: function() {
             //var unitids = [];
             //Station.workunits
                 

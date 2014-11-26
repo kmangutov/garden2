@@ -51,6 +51,7 @@ module.exports = {
 			if(err) 
 				return res.send(500, {error:"DB error"});
 		
+			sails.log("stations: " + JSON.stringify(stations));
 			stations.forEach(function(station) {
 				station.matchWorkUnits(station.workunits);
 			});
