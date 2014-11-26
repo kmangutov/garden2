@@ -31,7 +31,7 @@ module.exports = {
                 //for all volunteer
 
                 Volunteer.find().exec(function(err, volunteers) {
-                    volunteers.forEach(function(volunteer) {    
+                    for (var volunteer in volunteers) {  
                         if (volunteer.workunits.length < 10 || volunteer.freetimes.length > 0) {
                             for (var t in volunteer.freetimes) {
                                 // compare freetimes vs workunit
@@ -60,10 +60,9 @@ module.exports = {
 
                         });
 
-                    }); //end forEach
+                    } //end for
                 }); //end exec
             
-
                 //saved all changes
                 w.save(function (err) {
 
