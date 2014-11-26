@@ -5,29 +5,41 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-var jwt = require('jsonwebtoken');
-
 module.exports = {
-	login: function(req, res) {
+	authenticate: function(req, res) {
 		var email = req.param("email");
 		var password = req.param("password");
 
 
-		Volunteer.findByEmail(email).exec(function(err, usr){
-			sails.log(usr[0]);
+		Volunteer.findOneByEmail(email).exec(function(err, user){
 			if(err)
-				return res.send(500, {error: "DB Error"});
-			if(usr.length > 0) {
-				var jwtSecret = "secretl0l";
-				var token = jwt.sign(usr, jwtSecret, {expiresInMinutes: 60*5});
-				req.session.user = usr[0].id;
-				sails.log("login success token:" + token);
-				return res.send(200, {user:usr, msg:"succeed", token: token});
-			}
-			else{
-				req.session.user = null;
-				return res.send(404, {error: "User not found"});
-			}
+				return res.json(500, {error: "DB Error"});
+			if(!user)
+				return res.json(404, {error: "User not found"});
+
+			Volunteer.validPassword(password, user, function(err, valid) {
+				if(err)
+					return res.json(403, {error: "Forbidden"});
+				if(!valid)
+					return res.json(401, {error: "Invalid email or password"});
+				else
+					return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
+			});
+		});
+	},
+
+	register: function(req, res) {
+		var email = req.body.email;
+		var password = req.body.password;
+
+		if(!email || !password)
+			return res.json(401, {error: "Missing email or password"});
+
+		Volunteer.create({email: email, password: password}).exec(function(err, user) {
+			if(err)
+				return res.json(err.status, {error: "Error:" + err});
+			if(user)
+				return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
 		});
 	},
 
