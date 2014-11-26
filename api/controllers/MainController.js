@@ -44,13 +44,15 @@ module.exports = {
 	},
 
 	matchall: function(req, res) {
-		Station.find().exec(function(err, stations) {
+		Station.find()
+		.populate('workunits')
+		.exec(function(err, stations) {
 			//for every station 
 			if(err) 
 				return res.send(500, {error:"DB error"});
 		
 			stations.forEach(function(station) {
-				station.matchWorkUnits();
+				station.matchWorkUnits(station.workunits);
 			});
 
 			return res.send(200, {result:stations});
@@ -61,8 +63,11 @@ module.exports = {
 	matchWithId: function(req, res) {
 		var sid = req.param("stationid");
 
-		Station.find().where({id:sid}).exec(function(err, station){
-			station.matchWorkUnits();
+		Station.find()
+		.populate('workunits')
+		.where({id:sid})
+		.exec(function(err, station){
+			station.matchWorkUnits(station.workunits);
 		});
 	},
 

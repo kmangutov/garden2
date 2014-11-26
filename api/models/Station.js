@@ -29,7 +29,6 @@ module.exports = {
             //but for now this works 
             for (var w in workunits) {
                 //for all volunteer
-
                 Volunteer.find().exec(function(err, volunteers) {
                     for (var volunteer in volunteers) {  
                         if (volunteer.workunits.length < 10 || volunteer.freetimes.length > 0) {
