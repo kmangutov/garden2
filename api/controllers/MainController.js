@@ -64,6 +64,19 @@ module.exports = {
 		Station.find().where({id:sid}).exec(function(err, station){
 			station.matchWorkUnits();
 		});
+	},
+
+	reset: function(req, res) {
+		var sid = req.param("stationid");
+
+		Station.find()
+		.where({id:sid})
+		.exec(function(err, station){
+			if(err)
+				return res.send(500, {error:"DB Error"});
+			station.reset();
+			return res.send(200, {result:station});
+		});
 	}
 };
 

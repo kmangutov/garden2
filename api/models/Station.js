@@ -70,6 +70,7 @@ module.exports = {
             }
         },
 
+        //remove all association with workunits / volunteers
         reset:function() {
             //var unitids = [];
             //Station.workunits
