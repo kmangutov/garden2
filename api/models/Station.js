@@ -7,47 +7,78 @@
 
 module.exports = {
 
-  schema: true,
+    schema: true,
 
-  attributes: {
-    name: {
-      type: 'string',
-      unique: true,
-      required: true
-    },
+    attributes: {
+        name: {
+            type: 'string',
+            unique: true,
+            required: true
+        },
 
-    workunits: {
-      collection: 'workunit',
-      via: 'station'
-    },
+        workunits: {
+            collection: 'workunit',
+            via: 'station'
+        },
 
-    matchWorkUnits: function() {
-      sails.log("in matchworkunit");
-      //not sure this is most efficient way to populate workunits
-      //because I can't test unless station has association with some workunits
-      //and see if it has id or object in it
-      //but for now this works 
-      Station.find().where({id:this.id}).populate('workunits').exec(function(err, station){
-          for (var w in this.workunits) {
-              //for all volunteer
-              Volunteer.find().exec(function(err, volunteers) {
-                  volunteers.forEach(function(volunteer) {            
-                      if (volunteer.workunits.length < 10 && 
-                          volunteer.freetimes.length > 0 ) {
-                          for (var t in volunteer.freetimes) {
-                              // compare freetimes vs workunit
-                              // and make association if match 
-                          }
-                      
-                      } else {
-                      //max reach, pass 
-                      }
+        matchWorkUnits:function(workunits){
+            sails.log("in matchworkunit");
+            //not sure this is most efficient way to populate workunits
+            //because I can't test unless station has association with some workunits
+            //and see if it has id or object in it
+            //but for now this works 
+            for (var w in workunits) {
+                //for all volunteer
 
-                  });
-              });
-          }
-      });
+                Volunteer.find().exec(function(err, volunteers) {
+                    volunteers.forEach(function(volunteer) {    
+                        if (volunteer.workunits.length < 10 || volunteer.freetimes.length > 0) {
+                            for (var t in volunteer.freetimes) {
+                                // compare freetimes vs workunit
+                                // and make association if match 
+                                if (w.slot.toISOString() == t.toISOString()) {
+                                    volunteer.workunits.add(w.id);
+                                    w.volunteers.add(volunteer.id);
+
+                                    //decrement need counter
+                                    w.volunteersNeeded--;
+                                }
+
+                                //break inner loop if need count is 0
+                                if (w.volunteersNeeded == 0 || volunteer.freetimes.length < 10)
+                                    break;
+
+                            }
+                            
+                        } 
+
+                        //workunit is fulled, proceed next workunit
+                        if(w.volunteersNeeded == 0)
+                            break;
+
+                        volunteer.save(function (err){
+
+                        });
+
+                    }); //end forEach
+                }); //end exec
+            
+
+                //saved all changes
+                w.save(function (err) {
+
+                });
+            }
+        },
+
+        reset:function() {
+            //var unitids = [];
+            //Station.workunits
+                
+            //});
+
+            //Volunteer.find().
+        }
     }
-  }
 };
 
