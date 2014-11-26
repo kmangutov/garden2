@@ -7,12 +7,19 @@
 
 module.exports = {
 
+  schema: true,
+
   attributes: {
-  	name: 'string',
-  	workunits: {
-  		collection: 'workunit',
-  		via: 'station'
-  	}
+    name: {
+      type: 'string',
+      unique: true,
+      required: true
+    },
+
+    workunits: {
+      collection: 'workunit',
+      via: 'station'
+    }
   }
 };
 

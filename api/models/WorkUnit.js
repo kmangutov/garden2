@@ -7,19 +7,21 @@
 
 module.exports = {
 
+  schema: true,
+
   attributes: {
-	slot: 'datetime',
-	volunteersNeeded: 'integer',
-	volunteers: {
-		collection: 'volunteer',
-		via: 'workunits',
-		dominant: true
-	},
-	station: {
-		model: 'station',
-		via: 'workunits',
-		dominant: true
-	}
+    slot: 'datetime',
+    volunteersNeeded: 'integer',
+    volunteers: {
+      collection: 'volunteer',
+      via: 'workunits',
+      dominant: true
+    },
+    station: {
+      model: 'station',
+      via: 'workunits',
+      dominant: true
+    }
   }
 };
 

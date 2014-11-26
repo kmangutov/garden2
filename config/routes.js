@@ -40,14 +40,14 @@ module.exports.routes = {
     view: 'kirill'
   },
 
-  'post /api/signup': {
-    controller: 'Volunteer',
-    action: 'signup'
+  'post /api/authenticate': {
+    controller: 'Main',
+    action: 'authenticate'
   },
 
-  'post /api/login': {
+  'post /api/register': {
     controller: 'Main',
-    action: 'login'
+    action: 'register'
   },
 
   'post /api/addtime': {
