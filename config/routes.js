@@ -68,6 +68,11 @@ module.exports.routes = {
   'get /api/station/matchall': {
     controller: 'MainController',
     action: 'matchall'
+  },
+
+  'get /api/station/reset': {
+    controller: 'MainController',
+    action: 'reset'
   }
 
   /***************************************************************************
