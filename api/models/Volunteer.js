@@ -21,14 +21,9 @@ module.exports = {
   	     },
 
         findIndexOf:function(time) {
-            sails.log("array length :" + this.freetimes.length);
-            var moment = require('moment');
             for (var i = 0; i < this.freetimes.length; i++){
-                //temporary fix
-                var obj = moment(this.freetimes[i]._i);
-                sails.log("time: " + obj);
-                sails.log("in time: " + time);
-                if(obj.toString() == time.toString()){
+                var obj = this.freetimes[i];
+                if(obj.toISOString() == time.toISOString()){
                     sails.log("find duplicate");
                     return i;
                 } 
