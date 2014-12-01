@@ -28,27 +28,9 @@ module.exports = {
       defaultsTo: false
     },
 
-    freetimes: { 
-      type:'array',
-      array: true
-    },
-
-    workunits: {
-      collection: 'workunit',
-      via: 'volunteers'
-    },
-
-    findIndexOf: function(time) {
-        sails.log("array length :" + this.freetimes.length);
-        var moment = require('moment');
-        for (var i = 0; i < this.freetimes.length; i++){
-            //temporary fix
-            var obj = moment(this.freetimes[i]._i);
-            if(obj.diff(time)){
-                sails.log("find duplicate");
-                return i;
-            }
-        }
+    freeUnits: {
+      collection: 'FreeUnit',
+      via: 'owner'
     },
 
     toJSON: function() {

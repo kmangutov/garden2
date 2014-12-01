@@ -50,30 +50,11 @@ module.exports.routes = {
     action: 'register'
   },
 
-  'post /api/addtime': {
-    controller: 'Volunteer',
-    action: 'addFreeTime'
-  },
-  
-  'post /api/removetime': {
-    controller: 'Volunteer',
-    action: 'removeFreeTime'
-  },
-
-  'post /api/removeall': {
-    controller: 'Volunteer',
-    action: 'removeAll'
-  },
-
-  'get /api/station/matchall': {
+  'get /api/matchAll': {
     controller: 'MainController',
-    action: 'matchall'
+    action: 'matchAll'
   },
 
-  'get /api/station/reset': {
-    controller: 'MainController',
-    action: 'reset'
-  }
 
   /***************************************************************************
   *                                                                          *

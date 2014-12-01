@@ -6,83 +6,86 @@
  */
 
 module.exports = {
-	authenticate: function(req, res) {
-		var email = req.param("email");
-		var password = req.param("password");
+
+  authenticate: function(req, res) {
+    var email = req.param("email");
+    var password = req.param("password");
 
 
-		Volunteer.findOneByEmail(email).exec(function(err, user){
-			if(err)
-				return res.json(500, {error: "DB Error"});
-			if(!user)
-				return res.json(404, {error: "User not found"});
+    Volunteer.findOneByEmail(email).exec(function(err, user){
+      if(err)
+        return res.json(500, {error: "DB Error"});
+      if(!user)
+        return res.json(404, {error: "User not found"});
 
-			Volunteer.validPassword(password, user, function(err, valid) {
-				if(err)
-					return res.json(403, {error: "Forbidden"});
-				if(!valid)
-					return res.json(401, {error: "Invalid email or password"});
-				else
-					return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
-			});
-		});
-	},
+      Volunteer.validPassword(password, user, function(err, valid) {
+        if(err)
+          return res.json(403, {error: "Forbidden"});
+        if(!valid)
+          return res.json(401, {error: "Invalid email or password"});
+        else
+          return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
+      });
+    });
+  },
 
-	register: function(req, res) {
-		var email = req.body.email;
-		var password = req.body.password;
+  register: function(req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
 
-		if(!email || !password)
-			return res.json(401, {error: "Missing email or password"});
+    if(!email || !password)
+      return res.json(401, {error: "Missing email or password"});
 
-		Volunteer.create({email: email, password: password}).exec(function(err, user) {
-			if(err)
-				return res.json(err.status, {error: "Error:" + err});
-			if(user)
-				return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
-		});
-	},
+    Volunteer.create({email: email, password: password}).exec(function(err, user) {
+      if(err)
+        return res.json(err.status, {error: "Error:" + err});
+      if(user)
+        return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
+    });
+  },
 
-	matchall: function(req, res) {
-		Station.find()
-		.populate('workunits')
-		.exec(function(err, stations) {
-			//for every station 
-			if(err) 
-				return res.send(500, {error:"DB error"});
-		
-			sails.log("stations: " + JSON.stringify(stations));
-			stations.forEach(function(station) {
-				station.matchWorkUnits(station.workunits);
-			});
+  matchAll: function(req, res) {
 
-			return res.send(200, {result:stations});
-		});
+    /*WorkUnit.doForEach(function(workunit){
 
-	},
+      workunit.possibleFreeUnit(function(freeunits){
+        freeunits.forEach(function(freeunit){
+                
+          var string = "WorkUnit[" + workunit.owner.name + " " + workunit.slot + "] ";
+          string += "possible FreeUnit:" + freeunit.owner.email;
+          sails.log(string);
+        });
+      });
+    });*/
+    WorkUnit.find()
+      .populate("owner")
+      .then(function(workunits) {
+        sails.log("before sort");
 
-	matchWithId: function(req, res) {
-		var sid = req.param("stationid");
+        workunits.forEach(function(workunit) {
+          sails.log("\t" + workunit.owner.name + " " + workunit.slot);
+        });
+        sails.log("-------");
 
-		Station.find()
-		.populate('workunits')
-		.where({id:sid})
-		.exec(function(err, station){
-			station.matchWorkUnits(station.workunits);
-		});
-	},
+        workunits.sort(function(a, b){
 
-	reset: function(req, res) {
-		var sid = req.param("stationid");
+          a.possibleFreeUnit(function (aFreeUnits){
+            b.possibleFreeUnit(function (bFreeUnits){
+              sails.log(a.toString() + ": " + aFreeUnits.length + 
+                " vs " + b.toString() + ": " + bFreeUnits.length);
+              return aFreeUnits.length - bFreeUnits.length;
+            });
+          });
+        });
+    
+        setTimeout(function(){
+          workunits.forEach(function(workunit) {
+            sails.log("\t" + workunit.owner.name + " " + workunit.slot);
+          });
+        }, 1000);    
 
-		Station.find()
-		.where({id:sid})
-		.exec(function(err, station){
-			if(err)
-				return res.send(500, {error:"DB Error"});
-			station.reset();
-			return res.send(200, {result:station});
-		});
-	}
+      });
+  },
+
 };
 

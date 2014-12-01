@@ -12,7 +12,7 @@ module.exports = {
   attributes: {
     
     slot: {
-      type: 'datetime',
+      type: 'string',
       required: true
     },
 
@@ -21,17 +21,48 @@ module.exports = {
       required: true
     },
 
-    volunteers: {
-      collection: 'volunteer',
-      via: 'workunits',
+    owner: {
+      model: 'Station',
+      via: 'workUnits',
       dominant: true
     },
 
-    station: {
-      model: 'station',
-      via: 'workunits',
-      dominant: true
+    assignments: {
+      model: 'FreeUnit',
+      via: 'assignment'
+    },
+
+    possibleFreeUnit: {
+      type: 'integer'
     }
+
+    toString: function() {
+      return this.owner.name + " " + this.slot;
+    },
+
+    possibleFreeUnit: function(next) {
+
+      var freeUnits = Array();
+      FreeUnit.find()
+        .populate("owner")
+        .where({slot: this.slot})
+        .exec(function(err, units){
+
+          this.possibleFreeUnit = units.length;
+          this.save(); 
+          
+          next(units);
+        });
+    }
+  },
+
+  doForEach: function(callback) {
+
+    WorkUnit.find()
+      .populate("owner")
+      .exec(function(err, workunits){
+        workunits.forEach(callback);
+      });
   }
 
 };
