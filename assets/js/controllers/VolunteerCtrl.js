@@ -3,5 +3,5 @@
  */
 var volunteerCtrl = angular.module('VolunteerCtrl', []);
 volunteerCtrl.controller('VolunteerController', function($scope){
-
+    $scope.tagline = "YEEEE GEEE!";
 });

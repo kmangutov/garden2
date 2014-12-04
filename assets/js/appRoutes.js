@@ -9,8 +9,24 @@ route.config(['$routeProvider', '$locationProvider',
       })
 
       .when('/admin', {
-        templateUrl: 'views/stations.html',
+        templateUrl: 'views/admin.html',
         controller: 'StationController'
+      })
+
+      .when('/volunteer', {
+        templateUrl: 'views/volunteer.html',
+        controller: 'VolunteerController'
+      })
+
+      .when('/about', {
+        templateUrl: 'views/about.html'
+      })
+
+      //only care define route, otherwise 404
+      .otherwise({
+        templateUrl: 'views/404.html'
       });
+
+
     $locationProvider.html5Mode(true);
   }]);
