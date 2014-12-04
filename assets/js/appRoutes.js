@@ -22,6 +22,15 @@ route.config(['$routeProvider', '$locationProvider',
         templateUrl: 'views/about.html'
       })
 
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'MainController'
+      })
+
+      .when('/welcome', {
+        templateUrl: 'views/login_default.html',
+        controller: 'MainController'
+      })
       //only care define route, otherwise 404
       .otherwise({
         templateUrl: 'views/404.html'
