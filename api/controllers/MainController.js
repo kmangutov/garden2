@@ -11,7 +11,7 @@ module.exports = {
     var email = req.param("email");
     var password = req.param("password");
 
-
+    sails.log(email + " and " + password);
     Volunteer.findOneByEmail(email).exec(function(err, user){
       if(err)
         return res.json(500, {error: "DB Error"});
@@ -50,7 +50,7 @@ module.exports = {
 
       workunit.possibleFreeUnit(function(freeunits){
         freeunits.forEach(function(freeunit){
-                
+
           var string = "WorkUnit[" + workunit.owner.name + " " + workunit.slot + "] ";
           string += "possible FreeUnit:" + freeunit.owner.email;
           sails.log(string);
@@ -71,18 +71,18 @@ module.exports = {
 
           a.possibleFreeUnit(function (aFreeUnits){
             b.possibleFreeUnit(function (bFreeUnits){
-              sails.log(a.toString() + ": " + aFreeUnits.length + 
+              sails.log(a.toString() + ": " + aFreeUnits.length +
                 " vs " + b.toString() + ": " + bFreeUnits.length);
               return aFreeUnits.length - bFreeUnits.length;
             });
           });
         });
-    
+
         setTimeout(function(){
           workunits.forEach(function(workunit) {
             sails.log("\t" + workunit.owner.name + " " + workunit.slot);
           });
-        }, 1000);    
+        }, 1000);
 
       });
   },
