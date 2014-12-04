@@ -32,10 +32,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'index'
-  },
-
   '/kirill': {
     view: 'kirill'
   },
@@ -53,7 +49,7 @@ module.exports.routes = {
   'get /api/matchAll': {
     controller: 'MainController',
     action: 'matchAll'
-  },
+  }
 
 
   /***************************************************************************

@@ -10,7 +10,7 @@ module.exports = {
   schema: true,
 
   attributes: {
-    
+
     slot: {
       type: 'string',
       required: true
@@ -34,7 +34,7 @@ module.exports = {
 
     possibleFreeUnit: {
       type: 'integer'
-    }
+    },
 
     toString: function() {
       return this.owner.name + " " + this.slot;
@@ -49,8 +49,8 @@ module.exports = {
         .exec(function(err, units){
 
           this.possibleFreeUnit = units.length;
-          this.save(); 
-          
+          this.save();
+
           next(units);
         });
     }
