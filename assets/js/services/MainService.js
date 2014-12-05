@@ -13,15 +13,5 @@ service.factory('LoginServ', ['$http', function($http){
         });
   };
 
-  serviceObj.welcome = function (){
-      return $http.get('/welcome')
-        .success(function(res){
-
-        })
-        .error(function(res){
-
-        });
-  };
-
   return serviceObj;
 }]);
