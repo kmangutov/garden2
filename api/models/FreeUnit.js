@@ -25,7 +25,12 @@ module.exports = {
   	assignment: {
   		model: 'WorkUnit',
   		via: 'assignments'
-  	}
+  	},
+
+    toString: function(next) {
+
+      return this.owner.email + "@" + this.slot;
+    }
   },
 
   resetAll: function(callback) {

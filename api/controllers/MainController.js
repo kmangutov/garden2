@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var moment = require('moment');
+
 module.exports = {
 
   authenticate: function(req, res) {
@@ -56,7 +58,29 @@ module.exports = {
 
   matchAll: function(req, res) {
 
-    WorkUnit.populatePossibleFreeUnit();
+    WorkUnit.populatePossibleFreeUnit(function(info) {
+
+      //sails.log(moment("12/3/2014 03:00 am", "MM/DD/YYYY hh:mm a") + "");
+
+      WorkUnit.doForEach(function(workunit) {
+
+        var volunteers = "";
+        async.forEach(workunit.assignments, 
+          function(freeunit, callback) {
+            Volunteer.findOne({id: freeunit.owner}, function(err, volunteer) {
+              volunteers += volunteer.email + " ";
+              callback();
+            });
+          },
+          function(err) {
+            sails.log(workunit.toString() + ":" + volunteers);
+          });
+
+        
+      });
+
+      return res.json(404, info);
+    });
   },
 
 };
