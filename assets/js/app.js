@@ -4,4 +4,5 @@
 angular.module('gardenApp',
   ['ngRoute', 'appRoutes', 'ngCookies',
     'MainCtrl', 'StationCtrl', 'VolunteerCtrl',
-  'StationService', 'VolunteerService', 'MainService']);
+  'StationService', 'VolunteerService', 'MainService',
+  'AuthService']);
