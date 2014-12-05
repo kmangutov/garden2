@@ -49,7 +49,7 @@ module.exports.routes = {
   'get /api/matchAll': {
     controller: 'MainController',
     action: 'matchAll'
-  }
+  },
 
   'get /api/resetAll': {
     controller: 'MainController',

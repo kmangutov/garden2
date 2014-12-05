@@ -16,6 +16,7 @@
 .volunteer_info .container {
 
 }
+
 /*    --------------------------------------------------
 	:: Login Section
 	-------------------------------------------------- */
@@ -72,10 +73,18 @@
   font-size: 14px;
   margin-bottom: 20px;
 }
+
 #login .forget {
   font-size: 13px;
   text-align: center;
-  display: block;
+  display: inline-block;
+}
+
+#login .signup {
+  font-size: 13px;
+  display: inline-block;
+  text-align: center;
+  width:50%;
 }
 
 /*    --------------------------------------------------
