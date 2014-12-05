@@ -26,6 +26,11 @@ module.exports = {
   		model: 'WorkUnit',
   		via: 'assignments'
   	}
+  },
+
+  resetAll: function(callback) {
+
+    FreeUnit.update({}, {assignment: null}, callback);
   }
 };
 

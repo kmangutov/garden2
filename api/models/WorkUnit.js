@@ -5,6 +5,9 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+var async = require('async');
+
+
 module.exports = {
 
   schema: true,
@@ -28,13 +31,13 @@ module.exports = {
     },
 
     assignments: {
-      model: 'FreeUnit',
+      collection: 'FreeUnit',
       via: 'assignment'
     },
 
     possibleFreeUnit: {
       type: 'integer'
-    }
+    },
 
     toString: function() {
       return this.owner.name + " " + this.slot;
@@ -47,9 +50,6 @@ module.exports = {
         .populate("owner")
         .where({slot: this.slot})
         .exec(function(err, units){
-
-          this.possibleFreeUnit = units.length;
-          this.save(); 
           
           next(units);
         });
@@ -63,6 +63,74 @@ module.exports = {
       .exec(function(err, workunits){
         workunits.forEach(callback);
       });
+  },
+
+  unfilledWorkUnitDifficultyDescending: function(doneCallback) {
+
+    var locals = [];
+
+    WorkUnit.find()
+      .populate("owner")
+      .populate("assignments")
+      .exec(function(err, workunits){
+
+        async.forEach(workunits, 
+          function(workunit, callback) {
+
+            //skip workunits that are have met maximum capacity
+            if(workunit.assignments.length >= workunit.volunteersNeeded)
+              return callback();
+
+
+            FreeUnit.find()
+              .populate("owner")
+              .where({slot: workunit.slot})
+              .exec(function(err, freeunits){
+
+                var obj = {workunit: workunit, freeunits: freeunits};
+                locals.push(obj);
+
+                callback();
+              });
+          },
+          function(err) {
+
+            locals.sort(function(a, b){
+
+                //of a or b, which is harder to populate? put it first 
+
+                // TODO: we might need to take into account a.workunit.volunteersNeeded
+                // to determine which one is harder to populate
+
+                return (a.freeunits.length) 
+                  - (b.freeunits.length);
+            });
+
+            sails.log("before callback");
+            doneCallback(locals);
+          }
+        );
+      });
+  },
+
+  populatePossibleFreeUnit: function() {
+
+
+    WorkUnit.unfilledWorkUnitDifficultyDescending(
+      function(locals){
+
+        sails.log("In order of hardest to populate to easiest: ");
+        locals.forEach(function(local){
+
+          var string = local.workunit.toString() + " ";
+          local.freeunits.forEach(function(freeunit){
+            string += freeunit.owner.email + " ";
+          });
+          sails.log(string);
+        });
+      });
+
+
   }
 
 };

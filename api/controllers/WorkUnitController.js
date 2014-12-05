@@ -7,5 +7,8 @@
 
 module.exports = {
 
+  populateAllPossibleFreeUnit: function(req, res) {
+  	WorkUnit.populatePossibleFreeUnit();
+  }
 };
 
