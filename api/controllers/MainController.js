@@ -5,13 +5,15 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var moment = require('moment');
+
 module.exports = {
 
   authenticate: function(req, res) {
     var email = req.param("email");
     var password = req.param("password");
 
-    sails.log(email + " and " + password);
+
     Volunteer.findOneByEmail(email).exec(function(err, user){
       if(err)
         return res.json(500, {error: "DB Error"});
@@ -44,48 +46,41 @@ module.exports = {
     });
   },
 
+  resetAll: function(req, res) {
+
+    FreeUnit.resetAll(function(err, profiles){
+
+      if(err)
+        return res.json(401, {error: "Some error"});
+      return res.json(404, profiles);
+    });
+  },
+
   matchAll: function(req, res) {
 
-    /*WorkUnit.doForEach(function(workunit){
+    WorkUnit.populatePossibleFreeUnit(function(info) {
 
-      workunit.possibleFreeUnit(function(freeunits){
-        freeunits.forEach(function(freeunit){
+      //sails.log(moment("12/3/2014 03:00 am", "MM/DD/YYYY hh:mm a") + "");
 
-          var string = "WorkUnit[" + workunit.owner.name + " " + workunit.slot + "] ";
-          string += "possible FreeUnit:" + freeunit.owner.email;
-          sails.log(string);
-        });
-      });
-    });*/
-    WorkUnit.find()
-      .populate("owner")
-      .then(function(workunits) {
-        sails.log("before sort");
+      WorkUnit.doForEach(function(workunit) {
 
-        workunits.forEach(function(workunit) {
-          sails.log("\t" + workunit.owner.name + " " + workunit.slot);
-        });
-        sails.log("-------");
-
-        workunits.sort(function(a, b){
-
-          a.possibleFreeUnit(function (aFreeUnits){
-            b.possibleFreeUnit(function (bFreeUnits){
-              sails.log(a.toString() + ": " + aFreeUnits.length +
-                " vs " + b.toString() + ": " + bFreeUnits.length);
-              return aFreeUnits.length - bFreeUnits.length;
+        var volunteers = "";
+        async.forEach(workunit.assignments,
+          function(freeunit, callback) {
+            Volunteer.findOne({id: freeunit.owner}, function(err, volunteer) {
+              volunteers += volunteer.email + " ";
+              callback();
             });
+          },
+          function(err) {
+            sails.log(workunit.toString() + ":" + volunteers);
           });
-        });
 
-        setTimeout(function(){
-          workunits.forEach(function(workunit) {
-            sails.log("\t" + workunit.owner.name + " " + workunit.slot);
-          });
-        }, 1000);
 
       });
+
+      return res.json(404, info);
+    });
   },
 
 };
-

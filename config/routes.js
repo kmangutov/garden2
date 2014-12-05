@@ -51,6 +51,10 @@ module.exports.routes = {
     action: 'matchAll'
   }
 
+  'get /api/resetAll': {
+    controller: 'MainController',
+    action: 'resetAll'
+  }
 
   /***************************************************************************
   *                                                                          *

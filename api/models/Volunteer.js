@@ -6,6 +6,7 @@
 */
 
 var bcrypt = require('bcrypt');
+var async = require('async');
 
 module.exports = {
 
@@ -33,11 +34,45 @@ module.exports = {
       via: 'owner'
     },
 
+    numAssignedHours: function(next) {
+
+      FreeUnit.find()
+        .where({owner: this.id})
+        .exec(function(err, freeunits) {
+
+          var local = 0;
+          async.forEach(freeunits, 
+            function(freeunit, callback) {
+
+              if(freeunit.assignment != null)
+                local++;
+              callback();
+            },
+            function(err) {
+
+              next(local);
+            }
+          );
+        });
+    },
+
     toJSON: function() {
       var obj = this.toObject();
       delete obj.password;
       return obj;
     }
+  },
+
+  listAssignedHours: function() {
+
+    Volunteer.find()
+      .exec(function(err, volunteers) {
+        volunteers.forEach(function(volunteer){
+          volunteer.numAssignedHours(function(hours) {
+            sails.log("Volunteer: " + volunteer.email + " Hours:" + hours)
+          });
+        });
+      });
   },
 
   beforeCreate: function(values, next) {
