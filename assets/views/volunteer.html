@@ -1,5 +1,29 @@
 <div class="jumbotron text-center">
-  <h1>Volunteer 4 Life???</h1>
+    <h1>Volunteer 4 Life???</h1>
 
-  <p>{{ tagline }}</p>
+    <p>{{ tagline }}</p>
+</div>
+
+<!-- jquery to remove login from nav -->
+
+<!-- <ul class="nav navbar-nav login-nav">
+  <li><a href="/login">Log in</a></li>
+  </ul>
+  -->
+
+<div class="volunteer_info">
+    <div class="container">
+        <div ng-show="status" class="user_stat">
+        <h2>Welcome {{ userinfo }} :)</h2>
+        <p>Display any station associate with this user</p>
+        <p>Display free time added by </p>
+        <p>Display form to add/remove free time</p>
+        </div>
+        <div class="whoareyou" ng-show="!status">
+            <h2 style="text-align: center;">{{ statusMessage }}</h2>
+
+            <a class="btn btn-custom btn-lg btn-block" href="/login">Log in</a>
+
+        </div>
+    </div>
 </div>
