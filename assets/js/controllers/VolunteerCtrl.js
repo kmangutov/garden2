@@ -12,6 +12,8 @@ volunteerCtrl.controller('VolunteerController', function($scope, $window, $log){
     $scope.status = false;
     $scope.statusMessage = '';
 
+    $scope.freetimes = [];
+
     $scope.init = function(){
         if($window.sessionStorage.token &&
           $window.sessionStorage.userinfo){
@@ -23,10 +25,19 @@ volunteerCtrl.controller('VolunteerController', function($scope, $window, $log){
         else {
             $scope.statusMessage = "Please log in D:";
         }
-    }
+
+        //query free times
+    };
 
     $scope.init();
 
+    $scope.addtime = function(){
+
+    };
+
+    $scope.removetime = function(){
+
+    };
    //function to handle add free time
    //function to handle remove free time
 });

@@ -30,8 +30,10 @@ mainCtrl.controller('MainController', function($scope, $location, $log, $window,
 
               $window.sessionStorage.token = data.token;
               $window.sessionStorage.userinfo = data.user.email;
+              $window.sessionStorage.isAdmin = data.user.admin;
               $scope.user = data.user.email;
 
+              $log.info("admin " + data.user.admin);
               $log.info(data.user.email);
 
               $location.url('/volunteer');
@@ -44,29 +46,18 @@ mainCtrl.controller('MainController', function($scope, $location, $log, $window,
           });
     };
 
-    $scope.logout = function(){
-      $log.info("User " + $scope.user + " has been logged out");
-      $scope.islogged = false;
-      $scope.isSuccessed = true;
-      delete $window.sessionStorage.token;
-      delete $window.sessionStorage.userinfo;
-      delete $window.sessionStorage.isAdmin;
-
-      $location.url('/');
-    };
-
     $scope.signup = function() {
         AuthServ.register($scope.formData.usr, $scope.formData.pw)
           .success(function(data){
               $log.info("success to register with " + $scope.formData['usr']);
               $scope.isSuccessed = true;
               $scope.islogged = true;
+              $scope.user = data.user.email;
 
               $window.sessionStorage.token = data.token;
               $window.sessionStorage.userinfo = data.user.email;
               $window.sessionStorage.isAdmin = data.user.admin;
 
-              $log.info(data.user.email);
               $location.url('/volunteer');
 
           })
@@ -77,6 +68,18 @@ mainCtrl.controller('MainController', function($scope, $location, $log, $window,
               $scope.result = data.error;
               $log.info(data);
           });
+    };
+
+
+    $scope.logout = function(){
+        $log.info("User " + $scope.user + " has been logged out");
+        $scope.islogged = false;
+        $scope.isSuccessed = true;
+        delete $window.sessionStorage.token;
+        delete $window.sessionStorage.userinfo;
+        delete $window.sessionStorage.isAdmin;
+
+        $location.url('/');
     };
 
 });
