@@ -15,10 +15,21 @@
     <div class="container">
         <div ng-show="status" class="user_stat">
         <h2>Welcome {{ userinfo }} :)</h2>
-        <p>Display any station associate with this user</p>
+        <form id="freetime" id="add-form" autocomplete="off">
+          <select>
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="opel">Opel</option>
+            <option value="audi">Audi</option>
+          </select>
+          <input type="submit" ng-click="add"
+        </form>
+
         <p>Display free time added by </p>
         <p>Display form to add/remove free time</p>
         </div>
+
+
         <div class="login text-center"  ng-show="!status">
             <h2 style="text-align: center;">{{ statusMessage }}</h2>
 

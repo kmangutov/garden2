@@ -7,8 +7,8 @@ route.config(['$routeProvider', '$locationProvider',
         templateUrl: 'views/main.html'
       })
 
-      .when('/admin', {
-        templateUrl: 'views/admin.html',
+      .when('/stations', {
+        templateUrl: 'views/stations.html',
         controller: 'StationController'
       })
 
