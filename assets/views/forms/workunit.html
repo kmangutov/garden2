@@ -4,7 +4,7 @@
         <label for="stations_lst" class="sr-only">Stations</label>
         <select id="stations_lst"
               ng-model="selected"
-              ng-options="station.id as station.name for station in stations"
+              ng-options="station.id as station.name for (id, station) in stations"
               ng-change="changed(selected)">
         </select>
     </div>
