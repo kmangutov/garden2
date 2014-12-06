@@ -34,14 +34,13 @@ module.exports = {
   register: function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
-    var admin = req.body.admin;
 
     if(!email || !password)
       return res.json(401, {error: "Missing email or password"});
 
-    Volunteer.create({email: email, password: password, admin:admin}).exec(function(err, user) {
+    Volunteer.create({email: email, password: password}).exec(function(err, user) {
       if(err)
-        return res.json(err.status, {error: "Email is already taken"});
+        return res.json(err.status, {error: "Error:" + err});
       if(user)
         return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
     });

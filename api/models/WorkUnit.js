@@ -1,9 +1,9 @@
 /**
- * WorkUnit.js
- *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/#!documentation/models
- */
+* WorkUnit.js
+*
+* @description :: TODO: You might write a short summary of how this model works and what it represents here.
+* @docs        :: http://sailsjs.org/#!documentation/models
+*/
 
 var async = require('async');
 var moment = require('moment');
@@ -14,7 +14,7 @@ module.exports = {
   schema: true,
 
   attributes: {
-
+    
     slot: {
       type: 'string',
       required: true
@@ -42,7 +42,7 @@ module.exports = {
 
     // check for possible free units.
     // take into account if person is already volunteering for something else
-    // at the same time (so he is ineligible) or
+    // at the same time (so he is ineligible) or 
     // if person has already reached max volunteer cap (ineligible also)
     possibleFreeUnit: function(next) {
 
@@ -53,13 +53,13 @@ module.exports = {
         .populate("owner")
         .where({slot: this.slot})
         .exec(function(err, units){
-
+          
           var realUnits = [];
 
 
           /*units.forEach(function(unit) {
-
-           });*/
+           
+          });*/
 
           async.forEach(units,
             function(unit, callback) {
@@ -84,63 +84,65 @@ module.exports = {
 
       var self = this;
       FreeUnit.find().where({assignment: this.id})
-        .exec(function(err, units) {
-          sails.log(units.length + " >= " + self.volunteersNeeded + "?");
-          if(units.length >= self.volunteersNeeded) {
-            sails.log("this slot is filled");
-            return next();
+      .exec(function(err, units) {
+        sails.log(units.length + " >= " + self.volunteersNeeded + "?");
+        if(units.length >= self.volunteersNeeded) {
+          sails.log("this slot is filled");
+          return next();
+        }
+
+        var placedTop = 3, placedBottom = 3;
+        var potentialTop = 2, potentialBottom = 2;
+
+        var potentialTopVolunteerIds = [];
+
+        self.possibleFreeUnit(function(freeunits) {
+
+          for(var i = 0; i < freeunits.length; i++) {
+            var freeunit = freeunits[i];
+            sails.log("Assign " + freeunit.toString() + " to " + self.toString());
+
+            freeunit.assignment = self.id;
+            freeunit.save(function(err) {
+              WorkUnit.find().populate("assignments")
+                .exec(function(err, workunit){});
+            });
+            return next(freeunit);
           }
-
-          var placedTop = 3, placedBottom = 3;
-          var potentialTop = 2, potentialBottom = 2;
-
-          var potentialTopVolunteerIds = [];
-
-          self.possibleFreeUnit(function(freeunits) {
-
-            for(var i = 0; i < freeunits.length; i++) {
-              var freeunit = freeunits[i];
-              sails.log("Assign " + freeunit.toString() + " to " + self.toString());
-
-              freeunit.assignment = self.id;
-              freeunit.save(function(err) {
-                WorkUnit.find().populate("assignments")
-                  .exec(function(err, workunit){});
-              });
-              return next(freeunit);
-            }
-          });
         });
+      });
 
       /*this.getTopPotentialFreeUnits(function(top) {
-          sails.log("top freeunits");
-          top.forEach(function(unit) {
-            sails.log(unit.toString());
-          });
-       });*/
+        sails.log("top freeunits");
+        top.forEach(function(unit) {
+          sails.log(unit.toString());
+        });
+      });*/
 
 
     },
 
     /*getTopAndBottomPotentialFreeUnits: function(next) {
-         var that = this;
-         this.getTop(function(top) {
-             top.possibleFreeUnit(function(topFreeunits) {
-                 that.getBot(function(bot) {
-                     bot.possibleFreeUnit(function(botFreeunits) {
-                         next(topFreeunits, botFreeunits);
-                     });
-                 });
-             });
-         });
-     },*/
+
+      var that = this;
+      this.getTop(function(top) {
+        top.possibleFreeUnit(function(topFreeunits) {
+          that.getBot(function(bot) {
+            bot.possibleFreeUnit(function(botFreeunits) {
+              next(topFreeunits, botFreeunits);
+            });
+          });
+        });
+      });
+    },*/
 
     /*getTopPotentialVolunteerId: function(next) {
-         var that = this;
-         this.getTopPotentialFreeUnits(function(freeunits) {
-              freeunits.forEach()
-         });
-     },*/
+
+      var that = this;
+      this.getTopPotentialFreeUnits(function(freeunits) {
+        freeunits.forEach()
+      });
+    },*/
 
     getTopPotentialFreeUnits: function(next) {
 
@@ -211,7 +213,7 @@ module.exports = {
       .populate("assignments")
       .exec(function(err, workunits){
 
-        async.forEach(workunits,
+        async.forEach(workunits, 
           function(workunit, callback) {
 
             //skip workunits that are have met maximum capacity
@@ -234,13 +236,13 @@ module.exports = {
 
             locals.sort(function(a, b){
 
-              //of a or b, which is harder to populate? put it first
+                //of a or b, which is harder to populate? put it first 
 
-              // TODO: we might need to take into account a.workunit.volunteersNeeded
-              // to determine which one is harder to populate
+                // TODO: we might need to take into account a.workunit.volunteersNeeded
+                // to determine which one is harder to populate
 
-              return (a.freeunits.length)
-                - (b.freeunits.length);
+                return (a.freeunits.length) 
+                  - (b.freeunits.length);
             });
 
             sails.log("before callback");
@@ -263,9 +265,9 @@ module.exports = {
 
     /*WorkUnit.findOne({id: 2}, function(err, unit) {
 
-        unit.tryMatch(function(f) {
-            callback(f);
-        });
+      unit.tryMatch(function(f) {
+        callback(f);
+      });
     });*/
   }
 };
