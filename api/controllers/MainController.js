@@ -40,7 +40,7 @@ module.exports = {
 
     Volunteer.create({email: email, password: password}).exec(function(err, user) {
       if(err)
-        return res.json(err.status, {error: "Error:" + err});
+        return res.json(err.status, {error: "Email is already taken"});
       if(user)
         return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
     });
