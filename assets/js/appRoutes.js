@@ -4,8 +4,7 @@ route.config(['$routeProvider', '$locationProvider',
   function($routeProvider, $locationProvider){
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainController'
+        templateUrl: 'views/main.html'
       })
 
       .when('/admin', {
@@ -23,8 +22,12 @@ route.config(['$routeProvider', '$locationProvider',
       })
 
       .when('/login', {
-        templateUrl: 'views/login.html',
-        controller: 'MainController'
+        templateUrl: 'views/login.html'
+        //controller: 'MainController'
+      })
+
+      .when('/logout', {
+        templateUrl: 'views/main.html'
       })
 
       //only care define route, otherwise 404

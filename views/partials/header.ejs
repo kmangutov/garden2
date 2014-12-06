@@ -18,7 +18,9 @@
         <li><a href="#"></a></li>
       </ul>
       <ul class="nav navbar-nav login-nav">
-        <li><a href="/login">Log in</a></li>
+        <li ng-show="islogged"><a ng-click="logout()">Log out</a></li>
+        <li ng-show="islogged"><a href="/">{{ user }}</a></li>
+        <li ng-show="!islogged"><a href="/login">Log in</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
