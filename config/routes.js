@@ -32,21 +32,17 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'index'
-  },
-
   '/kirill': {
     view: 'kirill'
   },
 
   'post /api/authenticate': {
-    controller: 'Main',
+    controller: 'MainController',
     action: 'authenticate'
   },
 
   'post /api/register': {
-    controller: 'Main',
+    controller: 'MainController',
     action: 'register'
   },
 

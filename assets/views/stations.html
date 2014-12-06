@@ -1,0 +1,29 @@
+<div class="stations">
+  <div class="station_header jumbotron text-center">
+      <h1>::'::.::'::.::'::...</h1>
+      <p>{{ tagline }}</p>
+  </div>
+  <div class="container">
+    <div ng-show="permission" class="admin_panel">
+      <div class="col-xs-6 col-sm-3 sidebar-offcanvas">
+          <div id="form-station" ng-include src="'views/forms/station.html'"></div>
+          <div id="form-workunit" ng-include src="'views/forms/workunit.html'"></div>
+      <!-- display any workunits associate with this station -->
+      <!-- and more info??? -->
+      </div>
+      <div class="col-xs-12 col-sm-9" id="station_list">
+
+        <button id="btn-action" class="btn btn-custom btn-sm" ng-click="removeSelection()">Delete</button>
+          <div class="stationSection">
+              <div class="stationlst" ng-repeat="(id, station) in stations">
+                <label><input type="checkbox" ng-click="updateSelect(station.id)"> {{ id }} : {{ station }}</label>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <div ng-show="!permission && islogged" class="user_panel">
+      <p>log in user panel</p>
+    </div>
+  </div>
+</div>

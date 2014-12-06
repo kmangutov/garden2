@@ -65,7 +65,7 @@ module.exports = {
       WorkUnit.doForEach(function(workunit) {
 
         var volunteers = "";
-        async.forEach(workunit.assignments, 
+        async.forEach(workunit.assignments,
           function(freeunit, callback) {
             Volunteer.findOne({id: freeunit.owner}, function(err, volunteer) {
               volunteers += volunteer.email + " ";
@@ -76,7 +76,7 @@ module.exports = {
             sails.log(workunit.toString() + ":" + volunteers);
           });
 
-        
+
       });
 
       return res.json(404, info);
@@ -84,4 +84,3 @@ module.exports = {
   },
 
 };
-
