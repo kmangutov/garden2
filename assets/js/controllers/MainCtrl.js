@@ -75,6 +75,7 @@ mainCtrl.controller('MainController', function($scope, $location, $log, $window,
         $log.info("User " + $scope.user + " has been logged out");
         $scope.islogged = false;
         $scope.isSuccessed = true;
+
         delete $window.sessionStorage.token;
         delete $window.sessionStorage.userinfo;
         delete $window.sessionStorage.isAdmin;

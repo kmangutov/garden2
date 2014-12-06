@@ -2,7 +2,7 @@
  * Created by R3alFr3e on 12/3/14.
  */
 var stationCtrl = angular.module('StationCtrl', []);
-stationCtrl.controller('StationController', function($scope, $log, $window, Station){
+stationCtrl.controller('StationController', function($rootScope, $scope, $log, $window, Station){
     $scope.tagline = "Station list .:|::|::|:."
     $scope.stations = {};
     $scope.selected = [];
@@ -12,12 +12,12 @@ stationCtrl.controller('StationController', function($scope, $log, $window, Stat
     $scope.result;
     $scope.formData = {};
 
-    $log.info($window.sessionStorage.isAdmin);
-    if($window.sessionStorage.isAdmin){
-        $scope.permission = true;
-    }
-
     $scope.init = function(){
+        if($window.sessionStorage.isAdmin &&
+          $window.sessionStorage.isAdmin == "true"){
+            $scope.permission = true;
+        }
+
         Station.getall()
           .success(function(data){
               $scope.addToStationList(data);
@@ -25,7 +25,6 @@ stationCtrl.controller('StationController', function($scope, $log, $window, Stat
           .error(function(data){
 
           });
-
     };
     $scope.init();
 
