@@ -3,30 +3,22 @@
  */
 var service = angular.module('AuthService', []);
 
-service.factory('AuthServ', ['$http', function($http, $window){
+service.factory('AuthServ', ['$http', function($http, $window, $location){
   var serviceObj = {};
 
   serviceObj.auth = function (user, password){
-    return $http.post('/api/authenticate', {email: user, password: password})
-      .success(function(res){
+    return $http.post('/api/authenticate', {email: user, password: password});
+  };
 
-      })
-      .error(function(res){
-
-      });
+  serviceObj.register = function(user, password){
+    return $http.post('/api/register', {email:user, password:password});
   };
 
   serviceObj.logout = function (){
-    return $http.get('/')
-      .success(function(res){
-          delete $window.sessionStorage.token;
-          delete $window.sessionStorage.userinfo;
-          delete $window.sessionStorage.isAdmin;
-      })
-      .error(function(res){
 
-      });
   }
+
   return serviceObj;
+
 }]);
 
