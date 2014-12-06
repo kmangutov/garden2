@@ -113,35 +113,33 @@ module.exports = {
         });
 
       /*this.getTopPotentialFreeUnits(function(top) {
-       sails.log("top freeunits");
-       top.forEach(function(unit) {
-       sails.log(unit.toString());
-       });
+          sails.log("top freeunits");
+          top.forEach(function(unit) {
+            sails.log(unit.toString());
+          });
        });*/
 
 
     },
 
     /*getTopAndBottomPotentialFreeUnits: function(next) {
-
-     var that = this;
-     this.getTop(function(top) {
-     top.possibleFreeUnit(function(topFreeunits) {
-     that.getBot(function(bot) {
-     bot.possibleFreeUnit(function(botFreeunits) {
-     next(topFreeunits, botFreeunits);
-     });
-     });
-     });
-     });
+         var that = this;
+         this.getTop(function(top) {
+             top.possibleFreeUnit(function(topFreeunits) {
+                 that.getBot(function(bot) {
+                     bot.possibleFreeUnit(function(botFreeunits) {
+                         next(topFreeunits, botFreeunits);
+                     });
+                 });
+             });
+         });
      },*/
 
     /*getTopPotentialVolunteerId: function(next) {
-
-     var that = this;
-     this.getTopPotentialFreeUnits(function(freeunits) {
-     freeunits.forEach()
-     });
+         var that = this;
+         this.getTopPotentialFreeUnits(function(freeunits) {
+              freeunits.forEach()
+         });
      },*/
 
     getTopPotentialFreeUnits: function(next) {
@@ -265,9 +263,9 @@ module.exports = {
 
     /*WorkUnit.findOne({id: 2}, function(err, unit) {
 
-     unit.tryMatch(function(f) {
-     callback(f);
-     });
-     });*/
+        unit.tryMatch(function(f) {
+            callback(f);
+        });
+    });*/
   }
 };
