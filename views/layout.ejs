@@ -45,6 +45,7 @@
     <script src="/js/app.js"></script>
     <script src="/js/appRoutes.js"></script>
     <script src="/js/controllers/MainCtrl.js"></script>
+    <script src="/js/controllers/ModalCtrl.js"></script>
     <script src="/js/controllers/StationCtrl.js"></script>
     <script src="/js/controllers/VolunteerCtrl.js"></script>
     <script src="/js/services/AuthService.js"></script>
@@ -54,7 +55,7 @@
     <!--SCRIPTS END-->
   </head>
 
-  <body ng-app="gardenApp">
+  <body ng-app="gardenApp" ng-controller="MainController">
       <div class="header">
         <% include partials/header %>
       </div>
