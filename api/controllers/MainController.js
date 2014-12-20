@@ -26,7 +26,7 @@ module.exports = {
         if(!valid)
           return res.json(401, {error: "Invalid email or password"});
         else
-          return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
+          return res.json({user: user, token: VolunteerManager.issueToken(user.id)});
       });
     });
   },
@@ -42,7 +42,7 @@ module.exports = {
       if(err)
         return res.json(err.status, {error: "Error:" + err});
       if(user)
-        return res.json({user: user, token: sailsTokenAuth.issueToken(user.id)});
+        return res.json({user: user, token: VolunteerManager.issueToken(user.id)});
     });
   },
 
